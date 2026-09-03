@@ -1,0 +1,33 @@
+# Python virtual environment
+.venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Environment variables / secrets
+.env
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Raw and processed financial datasets
+data/raw/*
+data/staging/*
+data/curated/*
+
+# Keep folder structure in Git
+!data/raw/.gitkeep
+!data/staging/.gitkeep
+!data/curated/.gitkeep
+
+# Local databases
+*.duckdb
+*.db
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# VS Code local settings
+.vscode/
