@@ -1,0 +1,31 @@
+deals:
+  - deal_id: exeter_2025_1
+
+    deal_name: "Exeter Automobile Receivables Trust 2025-1"
+
+    asset_class: "auto_abs"
+
+    issuer_cik: "0002049379"
+
+    sponsor:
+      name: "Exeter Finance LLC"
+      cik: "0001541713"
+
+    depositor:
+      name: "EFCAR, LLC"
+      cik: "0001654238"
+
+    initial_filing:
+      form: "ABS-EE"
+      accession_number: "0000929638-25-000164"
+      filing_date: "2025-01-16"
+      reporting_period: "2024-12-31"
+
+      documents:
+        asset_data:
+          type: "EX-102"
+          filename: "eart2025-1_exhibit102.xml"
+
+        explanatory:
+          type: "EX-103"
+          filename: "eart2025-1_exhibit103.xml"

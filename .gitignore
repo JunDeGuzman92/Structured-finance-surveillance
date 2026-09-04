@@ -5,6 +5,9 @@
 __pycache__/
 *.py[cod]
 
+# Editable-install metadata
+*.egg-info/
+
 # Environment variables / secrets
 .env
 

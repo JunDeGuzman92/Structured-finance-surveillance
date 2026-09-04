@@ -1,0 +1,169 @@
+assetNumber:
+  curated_name: asset_id
+  data_type: string
+  category: identification
+
+obligorCreditScoreType:
+  curated_name: credit_score_type
+  data_type: string
+  category: underwriting
+
+obligorEmploymentVerificationCode:
+  curated_name: employment_verification_code
+  data_type: string
+  category: underwriting
+
+obligorGeographicLocation:
+  curated_name: obligor_geography
+  data_type: string
+  category: underwriting
+
+obligorIncomeVerificationLevelCode:
+  curated_name: income_verification_code
+  data_type: string
+  category: underwriting
+
+originalFirstPaymentDate:
+  curated_name: original_first_payment_date
+  data_type: date
+  category: origination
+
+originalInterestRatePercentage:
+  curated_name: original_interest_rate_pct
+  data_type: decimal
+  category: origination
+
+vehicleModelName:
+  curated_name: vehicle_model
+  data_type: string
+  category: collateral
+
+vehicleModelYear:
+  curated_name: vehicle_model_year
+  data_type: integer
+  category: collateral
+
+vehicleNewUsedCode:
+  curated_name: vehicle_new_used_code
+  data_type: string
+  category: collateral
+
+vehicleTypeCode:
+  curated_name: vehicle_type_code
+  data_type: string
+  category: collateral
+
+vehicleValueAmount:
+  curated_name: vehicle_value
+  data_type: decimal
+  category: collateral
+
+vehicleValueSourceCode:
+  curated_name: vehicle_value_source_code
+  data_type: string
+  category: collateral
+
+reportingPeriodActualEndBalanceAmount:
+  curated_name: current_balance
+  data_type: decimal
+  category: performance
+
+reportingPeriodScheduledPaymentAmount:
+  curated_name: scheduled_payment
+  data_type: decimal
+  category: performance
+
+scheduledPrincipalAmount:
+  curated_name: scheduled_principal
+  data_type: decimal
+  category: performance
+
+scheduledInterestAmount:
+  curated_name: scheduled_interest
+  data_type: decimal
+  category: performance
+
+totalActualAmountPaid:
+  curated_name: actual_payment
+  data_type: decimal
+  category: performance
+
+actualInterestCollectedAmount:
+  curated_name: interest_collected
+  data_type: decimal
+  category: performance
+
+interestPaidThroughDate:
+  curated_name: interest_paid_through_date
+  data_type: date
+  category: performance
+
+otherPrincipalAdjustmentAmount:
+  curated_name: other_principal_adjustment
+  data_type: decimal
+  category: performance
+
+paymentExtendedNumber:
+  curated_name: payment_extension_count
+  data_type: integer
+  category: credit_event
+
+chargedoffPrincipalAmount:
+  curated_name: charged_off_principal
+  data_type: decimal
+  category: loss
+
+repossessedIndicator:
+  curated_name: repossessed_flag
+  data_type: boolean
+  category: loss
+
+assetSubjectDemandIndicator:
+  curated_name: subject_to_demand_flag
+  data_type: boolean
+  category: credit_event
+
+  reportingPeriodBeginningLoanBalanceAmount:
+  curated_name: beginning_balance
+  data_type: decimal
+  category: performance
+
+  originalLoanAmount:
+  curated_name: original_loan_amount
+  data_type: decimal
+  category: origination
+
+originalLoanTerm:
+  curated_name: original_loan_term
+  data_type: integer
+  category: origination
+
+remainingTermToMaturityNumber:
+  curated_name: remaining_term_months
+  data_type: integer
+  category: performance
+
+obligorCreditScore:
+  curated_name: obligor_credit_score
+  data_type: integer
+  category: underwriting
+
+paymentToIncomePercentage:
+  curated_name: payment_to_income
+  data_type: decimal
+  category: underwriting
+
+currentDelinquencyStatus:
+  curated_name: current_delinquency_days
+  data_type: integer
+  category: credit_event
+
+actualPrincipalCollectedAmount:
+  curated_name: principal_collected
+  data_type: decimal
+  category: performance
+
+vehicleManufacturerName:
+  curated_name: vehicle_manufacturer
+  data_type: string
+  category: collateral

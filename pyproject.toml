@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "structured-finance-surveillance"
+version = "0.1.0"
+description = "Structured finance data quality and credit surveillance platform"
+requires-python = ">=3.12"
+dependencies = [
+    "requests",
+    "python-dotenv",
+    "lxml",
+    "pandas",
+    "polars",
+    "pyarrow",
+    "duckdb",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
