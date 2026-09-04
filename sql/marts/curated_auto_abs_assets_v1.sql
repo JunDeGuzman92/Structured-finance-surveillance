@@ -83,7 +83,7 @@ SELECT
         AS DECIMAL(18,2)
     ) AS interest_collected,
 
-    CAST(
+    TRY_CAST(
         TRY_STRPTIME(
             interestPaidThroughDate,
             '%m-%d-%Y'
@@ -110,10 +110,10 @@ SELECT
         AS BOOLEAN
     ) AS repossessed_flag,
 
-    TRY_CAST(
+        TRY_CAST(
         assetSubjectDemandIndicator
         AS BOOLEAN
-    ) AS subject_to_demand_flag
+    ) AS subject_to_demand_flag,
 
     TRY_CAST(
         originalLoanTerm
@@ -143,7 +143,17 @@ SELECT
     TRY_CAST(
         actualPrincipalCollectedAmount
         AS DECIMAL(18,2)
-    ) AS principal_collected
+    ) AS principal_collected,
+
+    TRY_CAST(
+        originalLoanAmount
+        AS DECIMAL(18,2)
+    ) AS original_loan_amount,
+
+    TRY_CAST(
+        reportingPeriodBeginningLoanBalanceAmount
+        AS DECIMAL(18,2)
+    ) AS beginning_loan_balance
 
 FROM read_parquet(
     'data/staging/exeter_2025_1/ex102_assets_full.parquet'

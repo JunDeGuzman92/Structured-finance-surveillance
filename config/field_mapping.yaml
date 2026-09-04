@@ -167,3 +167,13 @@ vehicleManufacturerName:
   curated_name: vehicle_manufacturer
   data_type: string
   category: collateral
+
+originalLoanAmount:
+  curated_name: original_loan_amount
+  data_type: decimal
+  category: origination
+
+reportingPeriodBeginningLoanBalanceAmount:
+  curated_name: beginning_loan_balance
+  data_type: decimal
+  category: performance
