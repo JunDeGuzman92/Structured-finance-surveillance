@@ -2,13 +2,20 @@
 
 > An end-to-end Auto ABS data engineering, credit surveillance, and financial-control platform built from public SEC asset-level regulatory filings.
 
+[![Live App](https://img.shields.io/badge/Live%20App-Streamlit-FF4B4B?logo=streamlit&logoColor=white)](https://structured-finance-surveillance.streamlit.app/)
+[![CI](https://github.com/JunDeGuzman92/Structured-finance-surveillance/actions/workflows/ci.yml/badge.svg)](https://github.com/JunDeGuzman92/Structured-finance-surveillance/actions/workflows/ci.yml)
+
 This project demonstrates how raw structured-finance regulatory data can be transformed into a validated, analysis-ready dataset and an interactive surveillance application for evaluating collateral performance, borrower credit characteristics, delinquency, vintage behavior, and data quality.
+
+### [Open the Live Dashboard →](https://structured-finance-surveillance.streamlit.app/)
 
 The platform processes **48,196 asset-level auto receivables representing approximately $1.069 billion of current collateral balance** from an SEC ABS-EE / EX-102 filing.
 
 It combines **Python, SQL, DuckDB, Parquet, Streamlit, Plotly, automated testing, and financial reconciliation controls** into one reproducible analytical workflow.
 
 ---
+## Interactive Application
+**Live application:** [Launch the Structured Finance Surveillance Dashboard](https://structured-finance-surveillance.streamlit.app/)
 
 ## Dashboard
 
