@@ -17,6 +17,7 @@ dependencies = [
     "duckdb",
     "streamlit",
     "plotly",
+    "PyYAML",
 ]
 
 [project.optional-dependencies]
