@@ -2,12 +2,7 @@
 
 import duckdb
 
-
-PARQUET_FILE = (
-    "data/staging/"
-    "exeter_2025_1/"
-    "ex102_assets_sample.parquet"
-)
+PARQUET_FILE = "data/staging/exeter_2025_1/ex102_assets_sample.parquet"
 
 
 def run_queries() -> None:
@@ -22,9 +17,7 @@ def run_queries() -> None:
         FROM read_parquet('{PARQUET_FILE}')
     """
 
-    loan_count = connection.execute(
-        loan_count_query
-    ).fetchdf()
+    loan_count = connection.execute(loan_count_query).fetchdf()
 
     print("LOAN COUNT")
     print("-" * 60)
@@ -44,9 +37,7 @@ def run_queries() -> None:
         LIMIT 10
     """
 
-    sample = connection.execute(
-        sample_query
-    ).fetchdf()
+    sample = connection.execute(sample_query).fetchdf()
 
     print("SAMPLE ASSET RECORDS")
     print("-" * 60)

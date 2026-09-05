@@ -70,7 +70,6 @@ def profile_xml(file_path: Path) -> None:
     tag_counts = Counter()
 
     for element in root.iter():
-
         clean_tag = strip_namespace(element.tag)
 
         # Ignore comments, processing instructions,
@@ -85,11 +84,6 @@ def profile_xml(file_path: Path) -> None:
 
 
 if __name__ == "__main__":
-
-    file_path = Path(
-        "data/raw/"
-        "exeter_2025_1/"
-        "eart2025-1_exhibit103.xml"
-    )
+    file_path = Path("data/raw/exeter_2025_1/eart2025-1_exhibit103.xml")
 
     profile_xml(file_path)

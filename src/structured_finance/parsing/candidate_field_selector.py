@@ -4,7 +4,6 @@ from pathlib import Path
 
 import pandas as pd
 
-
 INVENTORY_FILE = Path("docs/ex102_field_inventory.csv")
 
 
@@ -44,9 +43,7 @@ def select_candidate_fields() -> None:
     pattern = "|".join(KEYWORDS)
 
     candidates = df[
-        df["source_field"]
-        .str.lower()
-        .str.contains(pattern, na=False)
+        df["source_field"].str.lower().str.contains(pattern, na=False)
     ].copy()
 
     candidates = candidates.sort_values(

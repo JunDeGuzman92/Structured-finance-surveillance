@@ -5,7 +5,6 @@ import os
 import requests
 from dotenv import load_dotenv
 
-
 load_dotenv()
 
 BASE_ARCHIVES_URL = "https://www.sec.gov/Archives/edgar/data"
@@ -38,12 +37,7 @@ def build_filing_url(
     clean_cik = cik.lstrip("0")
     clean_accession = accession_without_dashes(accession_number)
 
-    return (
-        f"{BASE_ARCHIVES_URL}/"
-        f"{clean_cik}/"
-        f"{clean_accession}/"
-        f"{filename}"
-    )
+    return f"{BASE_ARCHIVES_URL}/{clean_cik}/{clean_accession}/{filename}"
 
 
 if __name__ == "__main__":

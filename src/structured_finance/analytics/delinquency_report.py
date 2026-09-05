@@ -1,14 +1,14 @@
-"""Generate headline delinquency surveillance KPIs."""
+"""Generate the Auto ABS delinquency surveillance report."""
 
 from pathlib import Path
 
 import duckdb
 
-SQL_FILE = Path("sql/marts/delinquency_kpis.sql")
+SQL_FILE = Path("sql/marts/delinquency_buckets.sql")
 
 
 def run_report() -> None:
-    """Run pool-level delinquency KPIs."""
+    """Run delinquency analysis on the curated asset pool."""
 
     query = SQL_FILE.read_text(encoding="utf-8")
 
@@ -16,8 +16,8 @@ def run_report() -> None:
 
     result = con.execute(query).fetchdf()
 
-    print("AUTO ABS DELINQUENCY KPIs")
-    print("=" * 100)
+    print("AUTO ABS DELINQUENCY SURVEILLANCE")
+    print("=" * 90)
     print(result.to_string(index=False))
 
     con.close()

@@ -2,27 +2,16 @@
 
 from pathlib import Path
 
-from lxml import etree
 import pyarrow as pa
 import pyarrow.parquet as pq
 import yaml
+from lxml import etree
 
+INPUT_FILE = Path("data/raw/exeter_2025_1/eart2025-1_exhibit102.xml")
 
-INPUT_FILE = Path(
-    "data/raw/"
-    "exeter_2025_1/"
-    "eart2025-1_exhibit102.xml"
-)
+MAPPING_FILE = Path("config/field_mapping.yaml")
 
-MAPPING_FILE = Path(
-    "config/field_mapping.yaml"
-)
-
-OUTPUT_FILE = Path(
-    "data/staging/"
-    "exeter_2025_1/"
-    "ex102_assets_full.parquet"
-)
+OUTPUT_FILE = Path("data/staging/exeter_2025_1/ex102_assets_full.parquet")
 
 DEAL_ID = "exeter_2025_1"
 REPORTING_PERIOD = "2024-12-31"
@@ -83,10 +72,7 @@ def parse_full_pool() -> None:
             ("deal_id", pa.string()),
             ("reporting_period", pa.string()),
         ]
-        + [
-            (field, pa.string())
-            for field in source_fields
-        ]
+        + [(field, pa.string()) for field in source_fields]
     )
 
     OUTPUT_FILE.parent.mkdir(
@@ -108,7 +94,6 @@ def parse_full_pool() -> None:
     )
 
     try:
-
         context = etree.iterparse(
             str(INPUT_FILE),
             events=("end",),
@@ -117,7 +102,6 @@ def parse_full_pool() -> None:
         )
 
         for _, element in context:
-
             if strip_namespace(element.tag) != "assets":
                 continue
 
@@ -130,16 +114,13 @@ def parse_full_pool() -> None:
                 record[source_field] = None
 
             for child in element:
-
                 field_name = strip_namespace(child.tag)
 
                 if field_name not in selected_fields:
                     continue
 
                 value = (
-                    child.text.strip()
-                    if child.text and child.text.strip()
-                    else None
+                    child.text.strip() if child.text and child.text.strip() else None
                 )
 
                 record[field_name] = value
@@ -156,17 +137,13 @@ def parse_full_pool() -> None:
                     del parent[0]
 
             if len(rows) >= BATCH_SIZE:
-
                 write_batch(
                     writer,
                     rows,
                     schema,
                 )
 
-                print(
-                    f"Processed: "
-                    f"{record_count:,} asset records"
-                )
+                print(f"Processed: {record_count:,} asset records")
 
                 rows.clear()
 
@@ -185,10 +162,7 @@ def parse_full_pool() -> None:
     print("=" * 60)
     print(f"Records written: {record_count:,}")
     print(f"Output: {OUTPUT_FILE}")
-    print(
-        f"Parquet size: "
-        f"{OUTPUT_FILE.stat().st_size:,} bytes"
-    )
+    print(f"Parquet size: {OUTPUT_FILE.stat().st_size:,} bytes")
 
 
 if __name__ == "__main__":

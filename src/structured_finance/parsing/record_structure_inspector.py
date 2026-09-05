@@ -4,7 +4,6 @@ from pathlib import Path
 
 from lxml import etree
 
-
 TARGET_FIELDS = {
     "scheduledInterestAmount",
     "scheduledPrincipalAmount",
@@ -66,7 +65,6 @@ def inspect_record_structure(file_path: Path) -> None:
         tag = strip_namespace(element.tag)
 
         if tag in TARGET_FIELDS and tag not in found:
-
             value = (
                 element.text.strip()
                 if element.text and element.text.strip()
@@ -75,22 +73,12 @@ def inspect_record_structure(file_path: Path) -> None:
 
             parent = element.getparent()
 
-            parent_tag = (
-                strip_namespace(parent.tag)
-                if parent is not None
-                else None
-            )
+            parent_tag = strip_namespace(parent.tag) if parent is not None else None
 
-            grandparent = (
-                parent.getparent()
-                if parent is not None
-                else None
-            )
+            grandparent = parent.getparent() if parent is not None else None
 
             grandparent_tag = (
-                strip_namespace(grandparent.tag)
-                if grandparent is not None
-                else None
+                strip_namespace(grandparent.tag) if grandparent is not None else None
             )
 
             print()
@@ -116,10 +104,6 @@ def inspect_record_structure(file_path: Path) -> None:
 
 
 if __name__ == "__main__":
-    file_path = Path(
-        "data/raw/"
-        "exeter_2025_1/"
-        "eart2025-1_exhibit102.xml"
-    )
+    file_path = Path("data/raw/exeter_2025_1/eart2025-1_exhibit102.xml")
 
     inspect_record_structure(file_path)

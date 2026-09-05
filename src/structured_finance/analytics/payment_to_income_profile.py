@@ -1,14 +1,14 @@
-"""Generate headline delinquency surveillance KPIs."""
+"""Profile payment-to-income values before defining risk bands."""
 
 from pathlib import Path
 
 import duckdb
 
-SQL_FILE = Path("sql/marts/delinquency_kpis.sql")
+SQL_FILE = Path("sql/marts/payment_to_income_profile.sql")
 
 
 def run_report() -> None:
-    """Run pool-level delinquency KPIs."""
+    """Inspect payment-to-income coverage and distribution."""
 
     query = SQL_FILE.read_text(encoding="utf-8")
 
@@ -16,7 +16,7 @@ def run_report() -> None:
 
     result = con.execute(query).fetchdf()
 
-    print("AUTO ABS DELINQUENCY KPIs")
+    print("PAYMENT-TO-INCOME PROFILE")
     print("=" * 100)
     print(result.to_string(index=False))
 

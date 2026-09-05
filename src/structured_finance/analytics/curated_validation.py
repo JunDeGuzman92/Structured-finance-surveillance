@@ -2,12 +2,7 @@
 
 import duckdb
 
-
-PARQUET_FILE = (
-    "data/curated/"
-    "exeter_2025_1/"
-    "auto_abs_assets_v1.parquet"
-)
+PARQUET_FILE = "data/curated/exeter_2025_1/auto_abs_assets_v1.parquet"
 
 
 def validate_curated() -> None:
@@ -26,11 +21,7 @@ def validate_curated() -> None:
         """
     ).fetchdf()
 
-    print(
-        schema[
-            ["column_name", "column_type"]
-        ].to_string(index=False)
-    )
+    print(schema[["column_name", "column_type"]].to_string(index=False))
 
     print()
     print("BASIC QUALITY CHECKS")

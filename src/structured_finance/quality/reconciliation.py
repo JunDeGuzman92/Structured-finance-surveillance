@@ -4,11 +4,7 @@ from pathlib import Path
 
 import duckdb
 
-
-SQL_FILE = Path(
-    "sql/quality/"
-    "pool_rollforward_reconciliation.sql"
-)
+SQL_FILE = Path("sql/quality/pool_rollforward_reconciliation.sql")
 
 
 def money(value) -> str:
@@ -23,9 +19,7 @@ def money(value) -> str:
 def run_reconciliation() -> None:
     """Execute and report the pool balance reconciliation control."""
 
-    query = SQL_FILE.read_text(
-        encoding="utf-8"
-    )
+    query = SQL_FILE.read_text(encoding="utf-8")
 
     con = duckdb.connect()
 
@@ -53,58 +47,31 @@ def run_reconciliation() -> None:
     print("BALANCES")
     print("-" * 72)
 
-    print(
-        f"Beginning pool balance:       "
-        f"{money(beginning_pool_balance)}"
-    )
+    print(f"Beginning pool balance:       {money(beginning_pool_balance)}")
 
-    print(
-        f"Ending pool balance:          "
-        f"{money(ending_pool_balance)}"
-    )
+    print(f"Ending pool balance:          {money(ending_pool_balance)}")
 
     print()
     print("PRINCIPAL MOVEMENTS")
     print("-" * 72)
 
-    print(
-        f"Principal collected:          "
-        f"{money(principal_collected)}"
-    )
+    print(f"Principal collected:          {money(principal_collected)}")
 
-    print(
-        f"Charged-off principal:        "
-        f"{money(charged_off_principal)}"
-    )
+    print(f"Charged-off principal:        {money(charged_off_principal)}")
 
-    print(
-        f"Other principal adjustments:  "
-        f"{money(other_principal_adjustments)}"
-    )
+    print(f"Other principal adjustments:  {money(other_principal_adjustments)}")
 
     print()
     print("CONTROL RESULT")
     print("-" * 72)
 
-    print(
-        f"Beginning - ending:           "
-        f"{money(balance_reduction)}"
-    )
+    print(f"Beginning - ending:           {money(balance_reduction)}")
 
-    print(
-        f"Principal movement total:     "
-        f"{money(principal_movement_total)}"
-    )
+    print(f"Principal movement total:     {money(principal_movement_total)}")
 
-    print(
-        f"Difference:                   "
-        f"{money(reconciliation_difference)}"
-    )
+    print(f"Difference:                   {money(reconciliation_difference)}")
 
-    print(
-        f"Status:                       "
-        f"{reconciliation_status}"
-    )
+    print(f"Status:                       {reconciliation_status}")
 
     con.close()
 

@@ -1,23 +1,16 @@
 """Build a field inventory from SEC EX-102 asset records."""
 
+import csv
 from collections import Counter, defaultdict
 from pathlib import Path
-import csv
 
 from lxml import etree
 
-
 MAX_RECORDS = 5_000
 
-INPUT_FILE = Path(
-    "data/raw/"
-    "exeter_2025_1/"
-    "eart2025-1_exhibit102.xml"
-)
+INPUT_FILE = Path("data/raw/exeter_2025_1/eart2025-1_exhibit102.xml")
 
-OUTPUT_FILE = Path(
-    "docs/ex102_field_inventory.csv"
-)
+OUTPUT_FILE = Path("docs/ex102_field_inventory.csv")
 
 
 def strip_namespace(tag) -> str | None:
@@ -53,7 +46,6 @@ def build_field_inventory(
     )
 
     for _, element in context:
-
         if strip_namespace(element.tag) != "assets":
             continue
 
@@ -62,7 +54,6 @@ def build_field_inventory(
         fields_seen = set()
 
         for child in element:
-
             field_name = strip_namespace(child.tag)
 
             if field_name is None:
@@ -70,14 +61,9 @@ def build_field_inventory(
 
             fields_seen.add(field_name)
 
-            value = (
-                child.text.strip()
-                if child.text and child.text.strip()
-                else None
-            )
+            value = child.text.strip() if child.text and child.text.strip() else None
 
             if value is not None:
-
                 non_null_count[field_name] += 1
 
                 if (
@@ -110,7 +96,6 @@ def build_field_inventory(
         newline="",
         encoding="utf-8",
     ) as csv_file:
-
         writer = csv.writer(csv_file)
 
         writer.writerow(
@@ -128,7 +113,6 @@ def build_field_inventory(
         )
 
         for field_name in all_fields:
-
             present = presence_count[field_name]
             non_null = non_null_count[field_name]
 
@@ -163,15 +147,10 @@ def build_field_inventory(
     print("-" * 70)
 
     for field_name in all_fields[:25]:
-
         present = presence_count[field_name]
         non_null = non_null_count[field_name]
 
-        print(
-            f"{field_name:<45}"
-            f" present={present:>5,}"
-            f" non_null={non_null:>5,}"
-        )
+        print(f"{field_name:<45} present={present:>5,} non_null={non_null:>5,}")
 
 
 if __name__ == "__main__":

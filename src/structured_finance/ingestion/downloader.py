@@ -10,7 +10,6 @@ from structured_finance.ingestion.sec_client import (
     build_filing_url,
 )
 
-
 RAW_DATA_DIR = Path("data/raw")
 
 CHUNK_SIZE = 1024 * 1024  # 1 MB
@@ -47,14 +46,10 @@ def download_sec_document(
         timeout=60,
         stream=True,
     ) as response:
-
         response.raise_for_status()
 
         with destination_path.open("wb") as file:
-
-            for chunk in response.iter_content(
-                chunk_size=CHUNK_SIZE
-            ):
+            for chunk in response.iter_content(chunk_size=CHUNK_SIZE):
                 if not chunk:
                     continue
 

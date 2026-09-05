@@ -4,25 +4,15 @@ from pathlib import Path
 
 import duckdb
 
+SQL_FILE = Path("sql/marts/curated_auto_abs_assets_v1.sql")
 
-SQL_FILE = Path(
-    "sql/marts/"
-    "curated_auto_abs_assets_v1.sql"
-)
-
-OUTPUT_FILE = Path(
-    "data/curated/"
-    "exeter_2025_1/"
-    "auto_abs_assets_v1.parquet"
-)
+OUTPUT_FILE = Path("data/curated/exeter_2025_1/auto_abs_assets_v1.parquet")
 
 
 def build_curated_dataset() -> None:
     """Transform staging SEC records into typed curated records."""
 
-    query = SQL_FILE.read_text(
-        encoding="utf-8"
-    ).strip().rstrip(";")
+    query = SQL_FILE.read_text(encoding="utf-8").strip().rstrip(";")
 
     OUTPUT_FILE.parent.mkdir(
         parents=True,
@@ -57,10 +47,7 @@ def build_curated_dataset() -> None:
 
     print(f"Curated records: {record_count:,}")
     print(f"Output: {OUTPUT_FILE}")
-    print(
-        f"File size: "
-        f"{OUTPUT_FILE.stat().st_size:,} bytes"
-    )
+    print(f"File size: {OUTPUT_FILE.stat().st_size:,} bytes")
 
 
 if __name__ == "__main__":

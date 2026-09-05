@@ -2,12 +2,7 @@
 
 import duckdb
 
-
-PARQUET_FILE = (
-    "data/staging/"
-    "exeter_2025_1/"
-    "ex102_assets_full.parquet"
-)
+PARQUET_FILE = "data/staging/exeter_2025_1/ex102_assets_full.parquet"
 
 
 def validate_full_staging() -> None:

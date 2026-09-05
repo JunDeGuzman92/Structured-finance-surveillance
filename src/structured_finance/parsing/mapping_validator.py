@@ -5,7 +5,6 @@ from pathlib import Path
 import pandas as pd
 import yaml
 
-
 INVENTORY_FILE = Path("docs/ex102_field_inventory.csv")
 MAPPING_FILE = Path("config/field_mapping.yaml")
 
@@ -15,9 +14,7 @@ def validate_mapping() -> None:
 
     inventory = pd.read_csv(INVENTORY_FILE)
 
-    inventory_fields = set(
-        inventory["source_field"].dropna().astype(str)
-    )
+    inventory_fields = set(inventory["source_field"].dropna().astype(str))
 
     with MAPPING_FILE.open(
         "r",
@@ -27,14 +24,11 @@ def validate_mapping() -> None:
 
     mapped_fields = set(mapping.keys())
 
-    missing_fields = sorted(
-        mapped_fields - inventory_fields
-    )
+    missing_fields = sorted(mapped_fields - inventory_fields)
 
     incomplete_fields = []
 
     for source_field, config in mapping.items():
-
         required_keys = {
             "curated_name",
             "data_type",

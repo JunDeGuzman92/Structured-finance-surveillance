@@ -4,7 +4,6 @@ from pathlib import Path
 
 from lxml import etree
 
-
 SAMPLE_RECORDS = 5
 
 
@@ -26,17 +25,12 @@ def extract_record(element) -> dict[str, str | None]:
     record = {}
 
     for child in element:
-
         tag = strip_namespace(child.tag)
 
         if tag is None:
             continue
 
-        value = (
-            child.text.strip()
-            if child.text and child.text.strip()
-            else None
-        )
+        value = child.text.strip() if child.text and child.text.strip() else None
 
         record[tag] = value
 
@@ -63,7 +57,6 @@ def sample_asset_records(
     record_number = 0
 
     for _, element in context:
-
         tag = strip_namespace(element.tag)
 
         # Based on our structure inspection,
@@ -102,11 +95,6 @@ def sample_asset_records(
 
 
 if __name__ == "__main__":
-
-    file_path = Path(
-        "data/raw/"
-        "exeter_2025_1/"
-        "eart2025-1_exhibit102.xml"
-    )
+    file_path = Path("data/raw/exeter_2025_1/eart2025-1_exhibit102.xml")
 
     sample_asset_records(file_path)

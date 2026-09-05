@@ -5,7 +5,6 @@ from pathlib import Path
 
 from lxml import etree
 
-
 MAX_ELEMENTS = 100_000
 
 
@@ -63,11 +62,7 @@ def inspect_xml_stream(
 
         text = element.text
 
-        if (
-            text
-            and text.strip()
-            and tag not in sample_values
-        ):
+        if text and text.strip() and tag not in sample_values:
             sample_values[tag] = text.strip()[:100]
 
         processed += 1
@@ -103,10 +98,6 @@ def inspect_xml_stream(
 
 
 if __name__ == "__main__":
-    file_path = Path(
-        "data/raw/"
-        "exeter_2025_1/"
-        "eart2025-1_exhibit102.xml"
-    )
+    file_path = Path("data/raw/exeter_2025_1/eart2025-1_exhibit102.xml")
 
     inspect_xml_stream(file_path)

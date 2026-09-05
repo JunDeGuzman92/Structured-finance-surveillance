@@ -2,12 +2,7 @@
 
 import duckdb
 
-
-PARQUET_FILE = (
-    "data/curated/"
-    "exeter_2025_1/"
-    "auto_abs_assets_v1.parquet"
-)
+PARQUET_FILE = "data/curated/exeter_2025_1/auto_abs_assets_v1.parquet"
 
 
 def calculate_kpis() -> None:

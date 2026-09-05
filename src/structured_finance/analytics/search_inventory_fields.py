@@ -4,12 +4,9 @@ from pathlib import Path
 
 import pandas as pd
 
-
 INVENTORY_FILE = Path("docs/ex102_field_inventory.csv")
 
-OUTPUT_FILE = Path(
-    "docs/reconciliation_field_candidates.csv"
-)
+OUTPUT_FILE = Path("docs/reconciliation_field_candidates.csv")
 
 
 def search_inventory() -> None:
@@ -17,20 +14,11 @@ def search_inventory() -> None:
 
     df = pd.read_csv(INVENTORY_FILE)
 
-    pattern = (
-        "balance|principal|original|beginning|"
-        "ending|cutoff|amount"
-    )
+    pattern = "balance|principal|original|beginning|ending|cutoff|amount"
 
-    matches = df[
-        df["source_field"]
-        .str.lower()
-        .str.contains(pattern, na=False)
-    ].copy()
+    matches = df[df["source_field"].str.lower().str.contains(pattern, na=False)].copy()
 
-    matches = matches.sort_values(
-        by="source_field"
-    )
+    matches = matches.sort_values(by="source_field")
 
     matches.to_csv(
         OUTPUT_FILE,

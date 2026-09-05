@@ -20,9 +20,9 @@ SELECT
         AS income_verification_code,
 
     CAST(
-        TRY_STRPTIME(
-            originalFirstPaymentDate,
-            '%m-%d-%Y'
+    TRY_STRPTIME(
+        '01/' || originalFirstPaymentDate,
+        '%d/%m/%Y'
         ) AS DATE
     ) AS original_first_payment_date,
 
@@ -110,7 +110,7 @@ SELECT
         AS BOOLEAN
     ) AS repossessed_flag,
 
-        TRY_CAST(
+    TRY_CAST(
         assetSubjectDemandIndicator
         AS BOOLEAN
     ) AS subject_to_demand_flag,

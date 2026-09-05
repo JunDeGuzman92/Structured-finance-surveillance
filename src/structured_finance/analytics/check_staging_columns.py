@@ -2,12 +2,7 @@
 
 import duckdb
 
-
-PARQUET_FILE = (
-    "data/staging/"
-    "exeter_2025_1/"
-    "ex102_assets_full.parquet"
-)
+PARQUET_FILE = "data/staging/exeter_2025_1/ex102_assets_full.parquet"
 
 
 PROPOSED_FIELDS = [
@@ -34,20 +29,13 @@ def check_columns() -> None:
         """
     ).fetchdf()
 
-    available_fields = set(
-        schema["column_name"].astype(str)
-    )
+    available_fields = set(schema["column_name"].astype(str))
 
     print("PROPOSED FIELD CHECK")
     print("=" * 75)
 
     for field in PROPOSED_FIELDS:
-
-        status = (
-            "FOUND"
-            if field in available_fields
-            else "NOT FOUND"
-        )
+        status = "FOUND" if field in available_fields else "NOT FOUND"
 
         print(f"{field:<50} {status}")
 
