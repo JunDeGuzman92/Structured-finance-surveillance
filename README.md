@@ -125,3 +125,4 @@ flowchart LR
     S --> V["Underwriting Risk"]
     S --> W["Vintage Analysis"]
     S --> X["Data Quality & Controls"]
+```
