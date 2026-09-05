@@ -32,15 +32,21 @@ data/staging/
 # Jupyter
 .ipynb_checkpoints/
 
-# Raw and processed financial datasets
+# Raw and staging financial datasets
 data/raw/*
 data/staging/*
+
+# Curated data: ignore by default
 data/curated/*
 
-# Keep folder structure in Git
+# Keep folder structure
 !data/raw/.gitkeep
 !data/staging/.gitkeep
 !data/curated/.gitkeep
+
+# Include the curated demo dataset required by the dashboard
+!data/curated/exeter_2025_1/
+!data/curated/exeter_2025_1/auto_abs_assets_v1.parquet
 
 # Local databases
 *.duckdb
