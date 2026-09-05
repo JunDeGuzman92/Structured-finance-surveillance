@@ -5,6 +5,24 @@
 __pycache__/
 *.py[cod]
 
+# Environment / secrets
+.env
+.streamlit/secrets.toml
+
+# Testing / tooling
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+
+# Pipeline data not intended for GitHub
+data/raw/
+data/staging/
+
 # Editable-install metadata
 *.egg-info/
 

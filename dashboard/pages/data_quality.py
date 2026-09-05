@@ -5,13 +5,11 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
-
 from shared import (
     PARQUET_FILE,
     compact_currency,
     parquet_path,
 )
-
 
 DATA_FILE = parquet_path()
 
@@ -36,7 +34,6 @@ def load_quality_data(
     con = duckdb.connect()
 
     try:
-
         query = f"""
             SELECT
                 COUNT(*) AS records,
@@ -127,11 +124,7 @@ def load_quality_data(
             )
         """
 
-        return (
-            con.execute(query)
-            .fetchdf()
-            .iloc[0]
-        )
+        return con.execute(query).fetchdf().iloc[0]
 
     finally:
         con.close()
@@ -143,29 +136,17 @@ quality = load_quality_data(
 )
 
 
-records = int(
-    quality["records"]
-)
+records = int(quality["records"])
 
-unique_assets = int(
-    quality["unique_assets"]
-)
+unique_assets = int(quality["unique_assets"])
 
-missing_ids = int(
-    quality["missing_asset_ids"]
-)
+missing_ids = int(quality["missing_asset_ids"])
 
-missing_balances = int(
-    quality["missing_current_balance"]
-)
+missing_balances = int(quality["missing_current_balance"])
 
-negative_balances = int(
-    quality["negative_current_balance"]
-)
+negative_balances = int(quality["negative_current_balance"])
 
-reconciliation_difference = float(
-    quality["reconciliation_difference"]
-)
+reconciliation_difference = float(quality["reconciliation_difference"])
 
 
 # ---------------------------------------------------------------------
@@ -203,13 +184,9 @@ columns[4].metric(
 
 
 if abs(reconciliation_difference) < 0.01:
-    st.success(
-        "Pool balance roll-forward reconciliation: PASS"
-    )
+    st.success("Pool balance roll-forward reconciliation: PASS")
 else:
-    st.error(
-        "Pool balance roll-forward reconciliation: FAIL"
-    )
+    st.error("Pool balance roll-forward reconciliation: FAIL")
 
 
 st.divider()
@@ -228,53 +205,33 @@ controls = pd.DataFrame(
             "Control": "Asset ID completeness",
             "Result": f"{missing_ids:,}",
             "Threshold": "0 missing",
-            "Status": (
-                "PASS"
-                if missing_ids == 0
-                else "FAIL"
-            ),
+            "Status": ("PASS" if missing_ids == 0 else "FAIL"),
         },
         {
             "Control": "Asset ID uniqueness",
             "Result": f"{records - unique_assets:,}",
             "Threshold": "0 duplicates",
-            "Status": (
-                "PASS"
-                if records == unique_assets
-                else "FAIL"
-            ),
+            "Status": ("PASS" if records == unique_assets else "FAIL"),
         },
         {
             "Control": "Current balance completeness",
             "Result": f"{missing_balances:,}",
             "Threshold": "0 missing",
-            "Status": (
-                "PASS"
-                if missing_balances == 0
-                else "FAIL"
-            ),
+            "Status": ("PASS" if missing_balances == 0 else "FAIL"),
         },
         {
             "Control": "Negative current balances",
             "Result": f"{negative_balances:,}",
             "Threshold": "0 negative",
-            "Status": (
-                "PASS"
-                if negative_balances == 0
-                else "FAIL"
-            ),
+            "Status": ("PASS" if negative_balances == 0 else "FAIL"),
         },
         {
             "Control": "First-payment date parsing",
-            "Result": (
-                f"{int(quality['populated_first_payment_date']):,}"
-            ),
+            "Result": (f"{int(quality['populated_first_payment_date']):,}"),
             "Threshold": f"{records:,} populated",
             "Status": (
                 "PASS"
-                if int(
-                    quality["populated_first_payment_date"]
-                ) == records
+                if int(quality["populated_first_payment_date"]) == records
                 else "FAIL"
             ),
         },
@@ -282,11 +239,7 @@ controls = pd.DataFrame(
             "Control": "Pool balance roll-forward",
             "Result": f"${reconciliation_difference:,.2f}",
             "Threshold": "< $0.01 absolute difference",
-            "Status": (
-                "PASS"
-                if abs(reconciliation_difference) < 0.01
-                else "FAIL"
-            ),
+            "Status": ("PASS" if abs(reconciliation_difference) < 0.01 else "FAIL"),
         },
     ]
 )
@@ -323,41 +276,17 @@ completeness = pd.DataFrame(
         "Populated": [
             records - missing_ids,
             records - missing_balances,
-            int(
-                quality[
-                    "populated_beginning_balance"
-                ]
-            ),
-            int(
-                quality[
-                    "populated_first_payment_date"
-                ]
-            ),
-            int(
-                quality[
-                    "populated_credit_score"
-                ]
-            ),
-            int(
-                quality[
-                    "populated_pti"
-                ]
-            ),
-            int(
-                quality[
-                    "populated_interest_rate"
-                ]
-            ),
+            int(quality["populated_beginning_balance"]),
+            int(quality["populated_first_payment_date"]),
+            int(quality["populated_credit_score"]),
+            int(quality["populated_pti"]),
+            int(quality["populated_interest_rate"]),
         ],
     }
 )
 
 
-completeness["Completeness %"] = (
-    100.0
-    * completeness["Populated"]
-    / records
-)
+completeness["Completeness %"] = 100.0 * completeness["Populated"] / records
 
 
 fig_completeness = px.bar(
@@ -366,8 +295,7 @@ fig_completeness = px.bar(
     y="Completeness %",
     text="Completeness %",
     labels={
-        "Completeness %":
-            "Completeness (%)",
+        "Completeness %": "Completeness (%)",
     },
 )
 
@@ -403,48 +331,32 @@ st.divider()
 st.subheader("Pool Balance Roll-Forward")
 
 
-beginning_balance = float(
-    quality["beginning_pool_balance"]
-)
+beginning_balance = float(quality["beginning_pool_balance"])
 
-ending_balance = float(
-    quality["ending_pool_balance"]
-)
+ending_balance = float(quality["ending_pool_balance"])
 
-principal_collected = float(
-    quality["principal_collected"]
-)
+principal_collected = float(quality["principal_collected"])
 
-charged_off = float(
-    quality["charged_off_principal"]
-)
+charged_off = float(quality["charged_off_principal"])
 
-other_adjustments = float(
-    quality["other_principal_adjustments"]
-)
+other_adjustments = float(quality["other_principal_adjustments"])
 
 
 recon_columns = st.columns(5)
 
 recon_columns[0].metric(
     "Beginning Balance",
-    compact_currency(
-        beginning_balance
-    ),
+    compact_currency(beginning_balance),
 )
 
 recon_columns[1].metric(
     "Principal Collected",
-    compact_currency(
-        principal_collected
-    ),
+    compact_currency(principal_collected),
 )
 
 recon_columns[2].metric(
     "Charge-Offs",
-    compact_currency(
-        charged_off
-    ),
+    compact_currency(charged_off),
 )
 
 recon_columns[3].metric(
@@ -454,16 +366,13 @@ recon_columns[3].metric(
 
 recon_columns[4].metric(
     "Ending Balance",
-    compact_currency(
-        ending_balance
-    ),
+    compact_currency(ending_balance),
 )
 
 
 waterfall = go.Figure(
     go.Waterfall(
         orientation="v",
-
         measure=[
             "absolute",
             "relative",
@@ -471,7 +380,6 @@ waterfall = go.Figure(
             "relative",
             "total",
         ],
-
         x=[
             "Beginning Balance",
             "Principal Collected",
@@ -479,7 +387,6 @@ waterfall = go.Figure(
             "Other Adjustments",
             "Ending Balance",
         ],
-
         y=[
             beginning_balance,
             -principal_collected,
@@ -487,19 +394,13 @@ waterfall = go.Figure(
             -other_adjustments,
             0,
         ],
-
         text=[
-            compact_currency(
-                beginning_balance
-            ),
+            compact_currency(beginning_balance),
             f"-{compact_currency(principal_collected)}",
             f"-{compact_currency(charged_off)}",
             f"{-other_adjustments:,.2f}",
-            compact_currency(
-                ending_balance
-            ),
+            compact_currency(ending_balance),
         ],
-
         connector={
             "line": {
                 "width": 1,
@@ -521,16 +422,9 @@ st.plotly_chart(
 )
 
 
-balance_reduction = (
-    beginning_balance
-    - ending_balance
-)
+balance_reduction = beginning_balance - ending_balance
 
-principal_movement = (
-    principal_collected
-    + charged_off
-    + other_adjustments
-)
+principal_movement = principal_collected + charged_off + other_adjustments
 
 
 reconciliation_table = pd.DataFrame(
@@ -559,12 +453,8 @@ reconciliation_table = pd.DataFrame(
 )
 
 
-reconciliation_table["Amount"] = (
-    reconciliation_table["Amount"]
-    .map(
-        lambda value:
-        f"${value:,.2f}"
-    )
+reconciliation_table["Amount"] = reconciliation_table["Amount"].map(
+    lambda value: f"${value:,.2f}"
 )
 
 

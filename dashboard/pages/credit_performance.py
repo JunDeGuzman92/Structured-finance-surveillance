@@ -3,19 +3,15 @@
 import duckdb
 import plotly.express as px
 import streamlit as st
-
 from shared import (
-    parquet_path,
     compact_currency,
+    parquet_path,
     percentage,
 )
 
-
 st.title("Credit Performance")
 
-st.caption(
-    "Point-in-time delinquency and borrower credit-risk surveillance."
-)
+st.caption("Point-in-time delinquency and borrower credit-risk surveillance.")
 
 
 DATA_FILE = parquet_path()
@@ -27,9 +23,9 @@ def load_credit_performance():
     con = duckdb.connect()
 
     try:
-
-        headline = con.execute(
-            f"""
+        headline = (
+            con.execute(
+                f"""
             SELECT
                 SUM(current_balance) AS pool_balance,
 
@@ -59,7 +55,10 @@ def load_credit_performance():
 
             FROM read_parquet('{DATA_FILE}')
             """
-        ).fetchdf().iloc[0]
+            )
+            .fetchdf()
+            .iloc[0]
+        )
 
         delinquency = con.execute(
             f"""
@@ -241,9 +240,7 @@ st.divider()
 st.subheader("Delinquency Distribution")
 
 delinquency["balance_share_pct"] = (
-    100
-    * delinquency["current_balance"]
-    / delinquency["current_balance"].sum()
+    100 * delinquency["current_balance"] / delinquency["current_balance"].sum()
 )
 
 fig_delinquency = px.bar(
@@ -253,8 +250,7 @@ fig_delinquency = px.bar(
     text="balance_share_pct",
     labels={
         "delinquency_bucket": "",
-        "balance_share_pct":
-            "Pool Balance Share (%)",
+        "balance_share_pct": "Pool Balance Share (%)",
     },
 )
 
@@ -285,10 +281,8 @@ fig_score = px.bar(
     y="delinquency_30_plus_pct",
     text="delinquency_30_plus_pct",
     labels={
-        "credit_score_band":
-            "Credit Score Band",
-        "delinquency_30_plus_pct":
-            "30+ Delinquency (%)",
+        "credit_score_band": "Credit Score Band",
+        "delinquency_30_plus_pct": "30+ Delinquency (%)",
     },
 )
 
@@ -322,16 +316,12 @@ display_score = score[
     ]
 ].copy()
 
-display_score["current_balance"] = (
-    display_score["current_balance"]
-    .map(lambda x: f"${x:,.2f}")
+display_score["current_balance"] = display_score["current_balance"].map(
+    lambda x: f"${x:,.2f}"
 )
 
-display_score["delinquency_30_plus_pct"] = (
-    display_score[
-        "delinquency_30_plus_pct"
-    ]
-    .map(lambda x: f"{x:.2f}%")
+display_score["delinquency_30_plus_pct"] = display_score["delinquency_30_plus_pct"].map(
+    lambda x: f"{x:.2f}%"
 )
 
 st.dataframe(

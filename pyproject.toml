@@ -19,5 +19,12 @@ dependencies = [
     "plotly",
 ]
 
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "ruff",
+]
+
 [tool.setuptools.packages.find]
 where = ["src"]

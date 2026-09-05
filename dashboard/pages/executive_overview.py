@@ -6,7 +6,6 @@ import duckdb
 import plotly.express as px
 import streamlit as st
 
-
 # ---------------------------------------------------------------------
 # Project paths
 # ---------------------------------------------------------------------
@@ -14,11 +13,7 @@ import streamlit as st
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 PARQUET_FILE = (
-    PROJECT_ROOT
-    / "data"
-    / "curated"
-    / "exeter_2025_1"
-    / "auto_abs_assets_v1.parquet"
+    PROJECT_ROOT / "data" / "curated" / "exeter_2025_1" / "auto_abs_assets_v1.parquet"
 )
 
 
@@ -36,6 +31,7 @@ st.set_page_config(
 # ---------------------------------------------------------------------
 # Formatting helpers
 # ---------------------------------------------------------------------
+
 
 def compact_currency(value: float) -> str:
     """Format large currency values for executive KPI cards."""
@@ -70,6 +66,7 @@ def percentage(value: float, decimals: int = 2) -> str:
 # Data loading
 # ---------------------------------------------------------------------
 
+
 @st.cache_data(show_spinner=False)
 def load_dashboard_data(
     parquet_path: str,
@@ -88,7 +85,6 @@ def load_dashboard_data(
     con = duckdb.connect()
 
     try:
-
         # -------------------------------------------------------------
         # Executive KPIs
         # -------------------------------------------------------------
@@ -181,12 +177,7 @@ def load_dashboard_data(
             )
         """
 
-        kpis = (
-            con.execute(kpi_query)
-            .fetchdf()
-            .iloc[0]
-            .to_dict()
-        )
+        kpis = con.execute(kpi_query).fetchdf().iloc[0].to_dict()
 
         # -------------------------------------------------------------
         # Delinquency distribution
@@ -287,9 +278,7 @@ def load_dashboard_data(
             ORDER BY bucket_order
         """
 
-        delinquency = con.execute(
-            delinquency_query
-        ).fetchdf()
+        delinquency = con.execute(delinquency_query).fetchdf()
 
         # -------------------------------------------------------------
         # Credit-score exposure
@@ -380,9 +369,7 @@ def load_dashboard_data(
             ORDER BY band_order
         """
 
-        credit_scores = con.execute(
-            credit_query
-        ).fetchdf()
+        credit_scores = con.execute(credit_query).fetchdf()
 
         # -------------------------------------------------------------
         # Data-quality / reconciliation controls
@@ -438,12 +425,7 @@ def load_dashboard_data(
             )
         """
 
-        quality = (
-            con.execute(quality_query)
-            .fetchdf()
-            .iloc[0]
-            .to_dict()
-        )
+        quality = con.execute(quality_query).fetchdf().iloc[0].to_dict()
 
         return (
             kpis,
@@ -461,15 +443,12 @@ def load_dashboard_data(
 # ---------------------------------------------------------------------
 
 if not PARQUET_FILE.exists():
-
     st.error(
         "Curated dataset not found. "
         "Build the curated dataset before launching the dashboard."
     )
 
-    st.code(
-        "python -m structured_finance.database.build_curated"
-    )
+    st.code("python -m structured_finance.database.build_curated")
 
     st.stop()
 
@@ -483,10 +462,7 @@ file_modified_time = PARQUET_FILE.stat().st_mtime
 # Load data
 # ---------------------------------------------------------------------
 
-with st.spinner(
-    "Loading structured-finance surveillance data..."
-):
-
+with st.spinner("Loading structured-finance surveillance data..."):
     (
         kpis,
         delinquency,
@@ -502,14 +478,9 @@ with st.spinner(
 # Header
 # ---------------------------------------------------------------------
 
-st.title(
-    "Structured Finance Data Quality & Surveillance Platform"
-)
+st.title("Structured Finance Data Quality & Surveillance Platform")
 
-st.caption(
-    "Auto ABS • Exeter 2025-1 • SEC ABS-EE / EX-102 "
-    "asset-level surveillance"
-)
+st.caption("Auto ABS • Exeter 2025-1 • SEC ABS-EE / EX-102 asset-level surveillance")
 
 st.divider()
 
@@ -529,9 +500,7 @@ row_one[0].metric(
 
 row_one[1].metric(
     "Current Pool Balance",
-    compact_currency(
-        kpis["pool_balance"]
-    ),
+    compact_currency(kpis["pool_balance"]),
 )
 
 row_one[2].metric(
@@ -544,9 +513,7 @@ row_one[2].metric(
 
 row_one[3].metric(
     "Average Loan Balance",
-    compact_currency(
-        kpis["average_loan_balance"]
-    ),
+    compact_currency(kpis["average_loan_balance"]),
 )
 
 
@@ -578,9 +545,7 @@ row_two[2].metric(
 
 row_two[3].metric(
     "Charged-Off Principal",
-    compact_currency(
-        kpis["charged_off_principal"]
-    ),
+    compact_currency(kpis["charged_off_principal"]),
 )
 
 st.divider()
@@ -592,13 +557,9 @@ st.divider()
 
 st.subheader("Data Quality & Control Status")
 
-reconciliation_difference = float(
-    quality["reconciliation_difference"]
-)
+reconciliation_difference = float(quality["reconciliation_difference"])
 
-reconciliation_passed = (
-    abs(reconciliation_difference) < 0.01
-)
+reconciliation_passed = abs(reconciliation_difference) < 0.01
 
 quality_columns = st.columns(5)
 
@@ -624,23 +585,15 @@ quality_columns[3].metric(
 
 quality_columns[4].metric(
     "Reconciliation Difference",
-    currency(
-        reconciliation_difference
-    ),
+    currency(reconciliation_difference),
 )
 
 
 if reconciliation_passed:
-
-    st.success(
-        "Pool balance roll-forward reconciliation: PASS"
-    )
+    st.success("Pool balance roll-forward reconciliation: PASS")
 
 else:
-
-    st.error(
-        "Pool balance roll-forward reconciliation: FAIL"
-    )
+    st.error("Pool balance roll-forward reconciliation: FAIL")
 
 
 # ---------------------------------------------------------------------
@@ -653,10 +606,7 @@ chart_left, chart_right = st.columns(2)
 
 
 with chart_left:
-
-    st.subheader(
-        "Delinquency Distribution"
-    )
+    st.subheader("Delinquency Distribution")
 
     delinquency_chart = px.bar(
         delinquency,
@@ -665,8 +615,7 @@ with chart_left:
         text="balance_share_pct",
         labels={
             "delinquency_bucket": "",
-            "balance_share_pct":
-                "Pool Balance Share (%)",
+            "balance_share_pct": "Pool Balance Share (%)",
         },
     )
 
@@ -677,12 +626,7 @@ with chart_left:
 
     delinquency_chart.update_layout(
         showlegend=False,
-        margin=dict(
-            l=20,
-            r=20,
-            t=20,
-            b=20,
-        ),
+        margin={"l": 20, "r": 20, "t": 20, "b": 20},
     )
 
     st.plotly_chart(
@@ -692,10 +636,7 @@ with chart_left:
 
 
 with chart_right:
-
-    st.subheader(
-        "Credit Score Exposure"
-    )
+    st.subheader("Credit Score Exposure")
 
     credit_chart = px.pie(
         credit_scores,
@@ -709,15 +650,8 @@ with chart_right:
     )
 
     credit_chart.update_layout(
-        legend_title_text=(
-            "Credit Score Band"
-        ),
-        margin=dict(
-            l=20,
-            r=20,
-            t=20,
-            b=20,
-        ),
+        legend_title_text=("Credit Score Band"),
+        margin={"l": 20, "r": 20, "t": 20, "b": 20},
     )
 
     st.plotly_chart(
@@ -732,27 +666,16 @@ with chart_right:
 
 st.divider()
 
-with st.expander(
-    "View delinquency detail"
-):
-
+with st.expander("View delinquency detail"):
     display_delinquency = delinquency.copy()
 
-    display_delinquency[
-        "current_balance"
-    ] = display_delinquency[
-        "current_balance"
-    ].map(
+    display_delinquency["current_balance"] = display_delinquency["current_balance"].map(
         lambda value: f"${value:,.2f}"
     )
 
-    display_delinquency[
+    display_delinquency["balance_share_pct"] = display_delinquency[
         "balance_share_pct"
-    ] = display_delinquency[
-        "balance_share_pct"
-    ].map(
-        lambda value: f"{value:.2f}%"
-    )
+    ].map(lambda value: f"{value:.2f}%")
 
     st.dataframe(
         display_delinquency,
@@ -761,25 +684,14 @@ with st.expander(
     )
 
 
-with st.expander(
-    "View credit-score detail"
-):
-
+with st.expander("View credit-score detail"):
     display_credit = credit_scores.copy()
 
-    display_credit[
-        "current_balance"
-    ] = display_credit[
-        "current_balance"
-    ].map(
+    display_credit["current_balance"] = display_credit["current_balance"].map(
         lambda value: f"${value:,.2f}"
     )
 
-    display_credit[
-        "balance_share_pct"
-    ] = display_credit[
-        "balance_share_pct"
-    ].map(
+    display_credit["balance_share_pct"] = display_credit["balance_share_pct"].map(
         lambda value: f"{value:.2f}%"
     )
 

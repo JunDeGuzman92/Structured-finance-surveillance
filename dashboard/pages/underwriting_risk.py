@@ -3,14 +3,12 @@
 import duckdb
 import plotly.express as px
 import streamlit as st
-
 from shared import (
     PARQUET_FILE,
     compact_currency,
     parquet_path,
     percentage,
 )
-
 
 DATA_FILE = parquet_path()
 
@@ -31,6 +29,7 @@ st.caption(
 # Data loading
 # ---------------------------------------------------------------------
 
+
 @st.cache_data(show_spinner=False)
 def load_underwriting_data(
     parquet_path_value: str,
@@ -44,7 +43,6 @@ def load_underwriting_data(
     con = duckdb.connect()
 
     try:
-
         matrix_query = f"""
             WITH normalized AS (
                 SELECT
@@ -217,10 +215,7 @@ def load_underwriting_data(
             FROM summary
         """
 
-        matrix = con.execute(
-            matrix_query
-        ).fetchdf()
-
+        matrix = con.execute(matrix_query).fetchdf()
 
         headline_query = f"""
             SELECT
@@ -284,11 +279,7 @@ def load_underwriting_data(
             )
         """
 
-        headline = (
-            con.execute(headline_query)
-            .fetchdf()
-            .iloc[0]
-        )
+        headline = con.execute(headline_query).fetchdf().iloc[0]
 
         return matrix, headline
 
@@ -306,17 +297,11 @@ matrix, headline = load_underwriting_data(
 # Executive underwriting KPIs
 # ---------------------------------------------------------------------
 
-total_balance = float(
-    headline["total_balance"]
-)
+total_balance = float(headline["total_balance"])
 
-sub_600_balance = float(
-    headline["sub_600_balance"]
-)
+sub_600_balance = float(headline["sub_600_balance"])
 
-total_30_plus_balance = float(
-    headline["total_30_plus_balance"]
-)
+total_30_plus_balance = float(headline["total_30_plus_balance"])
 
 
 kpi_columns = st.columns(4)
@@ -337,18 +322,14 @@ kpi_columns[1].metric(
 kpi_columns[2].metric(
     "Sub-600 Exposure",
     percentage(
-        100
-        * sub_600_balance
-        / total_balance,
+        100 * sub_600_balance / total_balance,
         2,
     ),
 )
 
 kpi_columns[3].metric(
     "30+ Delinquent Balance",
-    compact_currency(
-        total_30_plus_balance
-    ),
+    compact_currency(total_30_plus_balance),
 )
 
 
@@ -377,10 +358,7 @@ minimum_cohort_size = st.slider(
 )
 
 
-material_matrix = matrix[
-    matrix["loan_count"]
-    >= minimum_cohort_size
-].copy()
+material_matrix = matrix[matrix["loan_count"] >= minimum_cohort_size].copy()
 
 
 # ---------------------------------------------------------------------
@@ -406,17 +384,13 @@ pti_order = [
 ]
 
 
-heatmap_data = (
-    material_matrix
-    .pivot(
-        index="credit_score_band",
-        columns="pti_band",
-        values="delinquency_30_plus_pct",
-    )
-    .reindex(
-        index=credit_order,
-        columns=pti_order,
-    )
+heatmap_data = material_matrix.pivot(
+    index="credit_score_band",
+    columns="pti_band",
+    values="delinquency_30_plus_pct",
+).reindex(
+    index=credit_order,
+    columns=pti_order,
 )
 
 
@@ -433,12 +407,7 @@ fig_heatmap = px.imshow(
 
 
 fig_heatmap.update_layout(
-    margin=dict(
-        l=20,
-        r=20,
-        t=30,
-        b=20,
-    ),
+    margin={"l": 20, "r": 20, "t": 30, "b": 20},
 )
 
 
@@ -463,9 +432,7 @@ st.divider()
 st.subheader("Largest Contributors to 30+ Delinquent Exposure")
 
 top_risk = (
-    material_matrix[
-        material_matrix["balance_30_plus"] > 0
-    ]
+    material_matrix[material_matrix["balance_30_plus"] > 0]
     .copy()
     .sort_values(
         by="balance_30_plus",
@@ -475,26 +442,18 @@ top_risk = (
 )
 
 
-top_risk["cohort"] = (
-    top_risk["credit_score_band"]
-    + " | "
-    + top_risk["pti_band"]
-)
+top_risk["cohort"] = top_risk["credit_score_band"] + " | " + top_risk["pti_band"]
 
 
 fig_risk = px.bar(
-    top_risk.sort_values(
-        "balance_30_plus"
-    ),
+    top_risk.sort_values("balance_30_plus"),
     x="balance_30_plus",
     y="cohort",
     orientation="h",
     text="balance_30_plus",
     labels={
-        "balance_30_plus":
-            "30+ Delinquent Balance",
-        "cohort":
-            "Underwriting Cohort",
+        "balance_30_plus": "30+ Delinquent Balance",
+        "cohort": "Underwriting Cohort",
     },
 )
 
@@ -507,12 +466,7 @@ fig_risk.update_traces(
 
 fig_risk.update_layout(
     showlegend=False,
-    margin=dict(
-        l=20,
-        r=20,
-        t=20,
-        b=20,
-    ),
+    margin={"l": 20, "r": 20, "t": 20, "b": 20},
 )
 
 
@@ -544,20 +498,12 @@ display_risk = top_risk[
 ].copy()
 
 
-display_risk["cohort_balance"] = (
-    display_risk["cohort_balance"]
-    .map(
-        lambda value:
-        f"${value:,.2f}"
-    )
+display_risk["cohort_balance"] = display_risk["cohort_balance"].map(
+    lambda value: f"${value:,.2f}"
 )
 
-display_risk["balance_30_plus"] = (
-    display_risk["balance_30_plus"]
-    .map(
-        lambda value:
-        f"${value:,.2f}"
-    )
+display_risk["balance_30_plus"] = display_risk["balance_30_plus"].map(
+    lambda value: f"${value:,.2f}"
 )
 
 
@@ -567,13 +513,7 @@ for column in [
     "delinquency_60_plus_pct",
     "delinquency_90_plus_pct",
 ]:
-    display_risk[column] = (
-        display_risk[column]
-        .map(
-            lambda value:
-            f"{value:.2f}%"
-        )
-    )
+    display_risk[column] = display_risk[column].map(lambda value: f"{value:.2f}%")
 
 
 st.dataframe(
